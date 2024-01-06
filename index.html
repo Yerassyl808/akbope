@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Рисование</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #f0f0f0;
+        }
+
+        canvas {
+            display: block;
+            margin: 20px auto;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="drawingCanvas" width="800" height="500"></canvas>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const canvas = document.getElementById('drawingCanvas');
+            const context = canvas.getContext('2d');
+            let painting = false;
+
+            function startPosition(e) {
+                painting = true;
+                draw(e);
+            }
+
+            function endPosition() {
+                painting = false;
+                context.beginPath();
+            }
+
+            function draw(e) {
+                if (!painting) return;
+
+                context.lineWidth = 5;
+                context.lineCap = 'round';
+                context.strokeStyle = 'black';
+
+                context.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+                context.stroke();
+                context.beginPath();
+                context.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+            }
+
+            canvas.addEventListener('mousedown', startPosition);
+            canvas.addEventListener('mouseup', endPosition);
+            canvas.addEventListener('mousemove', draw);
+        });
+    </script>
+</body>
+</html>
